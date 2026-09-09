@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: nextgen-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nextgen_store
+      POSTGRES_USER: nextgen
+      POSTGRES_PASSWORD: nextgen
+    ports:
+      - "5432:5432"
+    volumes:
+      - nextgen_pgdata:/var/lib/postgresql/data
+
+volumes:
+  nextgen_pgdata:
