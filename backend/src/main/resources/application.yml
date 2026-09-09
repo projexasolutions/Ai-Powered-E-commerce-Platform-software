@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: nextgen-store-api
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/nextgen_store}
+    username: ${DATABASE_USERNAME:nextgen}
+    password: ${DATABASE_PASSWORD:nextgen}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+server:
+  port: ${PORT:8080}
