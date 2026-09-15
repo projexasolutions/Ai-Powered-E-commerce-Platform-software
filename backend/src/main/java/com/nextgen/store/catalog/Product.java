@@ -18,4 +18,5 @@ public class Product {
   protected Product() {}
   public Product(String name,String slug,String description,BigDecimal price,BigDecimal rating,String imageUrl,Category category){this.name=name;this.slug=slug;this.description=description;this.price=price;this.rating=rating;this.imageUrl=imageUrl;this.category=category;}
   public Long getId(){return id;} public String getName(){return name;} public String getSlug(){return slug;} public String getDescription(){return description;} public BigDecimal getPrice(){return price;} public BigDecimal getRating(){return rating;} public String getImageUrl(){return imageUrl;} public Category getCategory(){return category;}
+  public void setRating(BigDecimal rating){this.rating=rating;}
 }
