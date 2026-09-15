@@ -1,32 +1,3 @@
 package com.nextgen.store.config;
-
-import com.nextgen.store.auth.JwtAuthFilter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.*;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
-import org.springframework.web.cors.*;
-import java.util.List;
-
-@Configuration @EnableWebSecurity @EnableMethodSecurity
-public class SecurityConfig {
-    private final JwtAuthFilter jwt; @Value("${app.cors.allowed-origin:http://localhost:5173}") String origin;
-    public SecurityConfig(JwtAuthFilter jwt){this.jwt=jwt;}
-    @Bean PasswordEncoder passwordEncoder(){return new BCryptPasswordEncoder();}
-    @Bean SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
-        http.csrf(c->c.disable()).cors(c->c.configurationSource(corsConfigurationSource())).sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .headers(h->h.contentTypeOptions(Customizer.withDefaults()).frameOptions(f->f.deny()).referrerPolicy(r->r.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER)).httpStrictTransportSecurity(hsts->hsts.includeSubDomains(true).maxAgeInSeconds(31536000)))
-            .authorizeHttpRequests(a->a.requestMatchers("/api/v1/auth/**","/api/v1/payments/webhooks/razorpay").permitAll().requestMatchers(HttpMethod.GET,"/api/v1/products/**","/api/v1/categories/**").permitAll().anyRequest().authenticated()).addFilterBefore(jwt, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
-    @Bean CorsConfigurationSource corsConfigurationSource(){CorsConfiguration c=new CorsConfiguration();c.setAllowedOrigins(List.of(origin));c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));c.setAllowedHeaders(List.of("Authorization","Content-Type","Idempotency-Key","X-Razorpay-Signature","x-razorpay-event-id"));c.setAllowCredentials(true);UrlBasedCorsConfigurationSource s=new UrlBasedCorsConfigurationSource();s.registerCorsConfiguration("/**",c);return s;}
-}
+import com.nextgen.store.auth.JwtAuthFilter; import org.springframework.beans.factory.annotation.Value; import org.springframework.context.annotation.*; import org.springframework.http.HttpMethod; import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity; import org.springframework.security.config.annotation.web.builders.HttpSecurity; import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity; import org.springframework.security.config.http.SessionCreationPolicy; import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; import org.springframework.security.crypto.password.PasswordEncoder; import org.springframework.security.web.*; import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter; import org.springframework.security.config.Customizer; import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter; import org.springframework.web.cors.*; import java.util.List;
+@Configuration @EnableWebSecurity @EnableMethodSecurity public class SecurityConfig {private final JwtAuthFilter jwt;@Value("${app.cors.allowed-origin:http://localhost:5173}") String origin;public SecurityConfig(JwtAuthFilter jwt){this.jwt=jwt;}@Bean PasswordEncoder passwordEncoder(){return new BCryptPasswordEncoder();}@Bean SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{http.csrf(c->c.disable()).cors(c->c.configurationSource(corsConfigurationSource())).sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).headers(h->h.contentTypeOptions(Customizer.withDefaults()).frameOptions(f->f.deny()).referrerPolicy(r->r.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER)).httpStrictTransportSecurity(h->h.includeSubDomains(true).maxAgeInSeconds(31536000))).authorizeHttpRequests(a->a.requestMatchers("/api/v1/auth/**","/api/v1/payments/webhooks/razorpay").permitAll().requestMatchers(HttpMethod.GET,"/api/v1/products/**","/api/v1/categories/**","/api/v1/images/**").permitAll().anyRequest().authenticated()).addFilterBefore(jwt,UsernamePasswordAuthenticationFilter.class);return http.build();}@Bean CorsConfigurationSource corsConfigurationSource(){CorsConfiguration c=new CorsConfiguration();c.setAllowedOrigins(List.of(origin));c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));c.setAllowedHeaders(List.of("Authorization","Content-Type","Idempotency-Key","X-Razorpay-Signature","x-razorpay-event-id"));c.setAllowCredentials(true);UrlBasedCorsConfigurationSource s=new UrlBasedCorsConfigurationSource();s.registerCorsConfiguration("/**",c);return s;}}
