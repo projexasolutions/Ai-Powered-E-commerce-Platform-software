@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight, Heart, Minus, Plus, ShieldCheck, ShoppingBag, Star, Truck } from 'lucide-react';
+import ReviewSection from './ReviewSection';
 import './ProductDetail.css';
 
 type Product={id:number;name:string;slug:string;description:string;price:number;rating:number;category:string;imageUrl:string;variantId?:number;size?:string;color?:string};
@@ -39,5 +40,6 @@ export default function ProductDetail({productId,onBack,onAdd,onWishlist,liked}:
      </div>
    </div>
    <div className="detailStory"><span className="micro">THE GENZ EDIT</span><h2>Designed for everyday rotation.</h2><p>Build your fit around the piece, then let AI Stylist help you finish the look.</p></div>
+   <ReviewSection productId={detail.id}/>
  </section>;
 }
