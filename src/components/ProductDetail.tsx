@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, ArrowRight, Heart, Minus, Plus, ShieldCheck, ShoppingBag, Star, Truck } from 'lucide-react';
+import './ProductDetail.css';
 
 type Product={id:number;name:string;slug:string;description:string;price:number;rating:number;category:string;imageUrl:string;variantId?:number;size?:string;color?:string};
 type Variant={id:number;sku:string;size:string;color:string;stockQuantity:number;price:number};
@@ -9,25 +10,19 @@ const money=(n:number)=>`₹${n.toLocaleString('en-IN')}`;
 const api=import.meta.env.VITE_API_URL||'http://localhost:8080';
 
 export default function ProductDetail({productId,onBack,onAdd,onWishlist,liked}:{productId:number;onBack:()=>void;onAdd:(product:Product)=>void;onWishlist:(id:number)=>void;liked:boolean}){
- const [detail,setDetail]=useState<Detail|null>(null);
- const [loading,setLoading]=useState(true);
- const [size,setSize]=useState('');
- const [color,setColor]=useState('');
- const [quantity,setQuantity]=useState(1);
- const [error,setError]=useState('');
+ const [detail,setDetail]=useState<Detail|null>(null),[loading,setLoading]=useState(true),[size,setSize]=useState(''),[color,setColor]=useState(''),[quantity,setQuantity]=useState(1),[error,setError]=useState('');
  useEffect(()=>{setLoading(true);setError('');fetch(`${api}/api/v1/products/${productId}/detail`).then(r=>r.ok?r.json():Promise.reject()).then((d:Detail)=>{setDetail(d);const first=d.variants.find(v=>v.stockQuantity>0);if(first){setSize(first.size);setColor(first.color)}}).catch(()=>setError('We could not load this product right now.')).finally(()=>setLoading(false))},[productId]);
  const sizes=useMemo(()=>Array.from(new Set((detail?.variants||[]).map(v=>v.size))),[detail]);
  const colors=useMemo(()=>Array.from(new Set((detail?.variants||[]).map(v=>v.color))),[detail]);
  const selected=detail?.variants.find(v=>v.size===size&&v.color===color);
- const image=detail?.imageUrl||'';
  if(loading)return <section className="detailPage"><div className="detailLoading"><span className="micro">GENZ STORE</span><h1>Loading product…</h1></div></section>;
  if(error||!detail)return <section className="detailPage"><button className="detailBack" onClick={onBack}><ArrowLeft/> Back to shop</button><div className="detailLoading"><h1>Product unavailable</h1><p>{error||'This product could not be found.'}</p></div></section>;
- const add=()=>{if(!selected||selected.stockQuantity<1){setError('Select an available size and color.');return}if(quantity>selected.stockQuantity){setError(`Only ${selected.stockQuantity} left in stock.`);return}onAdd({...detail,variantId:selected.id,size:selected.size,color:selected.color,price:selected.price,category:detail.category,imageUrl:detail.imageUrl});setError('Added to your bag.');};
+ const add=()=>{if(!selected||selected.stockQuantity<1){setError('Select an available size and color.');return}if(quantity>selected.stockQuantity){setError(`Only ${selected.stockQuantity} left in stock.`);return}onAdd({...detail,variantId:selected.id,size:selected.size,color:selected.color,price:selected.price});setError('Added to your bag.');};
  return <section className="detailPage">
    <div className="detailTop"><button className="detailBack" onClick={onBack}><ArrowLeft/> Back to shop</button><div className="detailBrand">GenZ<span>Store</span><small>WEAR YOUR STORY</small></div><div className="detailTopRight"><span>PROJEXA SOLUTIONS</span><ShoppingBag/></div></div>
    <div className="detailBreadcrumb"><span>SHOP</span><b>/</b><span>{detail.category.toUpperCase()}</span><b>/</b><strong>{detail.name.toUpperCase()}</strong></div>
    <div className="detailGrid">
-     <div className="detailVisual"><img src={image} alt={detail.name}/><span>GENZ STORE / EDIT</span></div>
+     <div className="detailVisual"><img src={detail.imageUrl} alt={detail.name}/><span>GENZ STORE / EDIT</span></div>
      <div className="detailInfo">
        <div className="detailMeta"><span>{detail.category}</span><button onClick={()=>onWishlist(detail.id)} aria-label="Wishlist"><Heart fill={liked?'currentColor':'none'}/></button></div>
        <h1>{detail.name}</h1>
