@@ -29,4 +29,6 @@ public class Order {
   @PrePersist void onCreate(){var now=OffsetDateTime.now();createdAt=now;updatedAt=now;}
   @PreUpdate void onUpdate(){updatedAt=OffsetDateTime.now();}
   public Long getId(){return id;} public User getUser(){return user;} public Address getAddress(){return address;} public OrderStatus getStatus(){return status;} public BigDecimal getSubtotal(){return subtotal;} public BigDecimal getShippingAmount(){return shippingAmount;} public BigDecimal getDeliveryCharge(){return deliveryCharge;} public BigDecimal getTotalAmount(){return totalAmount;} public String getPaymentMethod(){return paymentMethod;} public String getPaymentStatus(){return paymentStatus;} public String getCurrency(){return currency;} public OffsetDateTime getCreatedAt(){return createdAt;} public List<OrderItem> getItems(){return items;}
+  public void setStatus(OrderStatus status){this.status=status;}
+  public void setPaymentStatus(String paymentStatus){this.paymentStatus=paymentStatus;}
 }
