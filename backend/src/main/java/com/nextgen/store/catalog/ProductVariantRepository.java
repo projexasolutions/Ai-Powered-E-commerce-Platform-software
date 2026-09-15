@@ -5,4 +5,5 @@ import java.util.List;
 
 public interface ProductVariantRepository extends JpaRepository<ProductVariant,Long>{
   List<ProductVariant> findByProductIdAndActiveTrueOrderBySizeAscColorAsc(Long productId);
+  List<ProductVariant> findByProductIdOrderBySizeAscColorAsc(Long productId);
 }
