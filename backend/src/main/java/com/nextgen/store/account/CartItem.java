@@ -12,6 +12,8 @@ public class CartItem {
  @Column(nullable=false) private int quantity;
  protected CartItem(){}
  public CartItem(Cart cart,ProductVariant variant,int quantity){this.cart=cart;this.variant=variant;this.quantity=quantity;this.id=new Id(null,variant.getId());}
- public Id getId(){return id;} public ProductVariant getVariant(){return variant;} public int getQuantity(){return quantity;} public void increase(int amount){quantity+=amount;}
+ public Id getId(){return id;} public ProductVariant getVariant(){return variant;} public int getQuantity(){return quantity;}
+ public void increase(int amount){quantity+=amount;}
+ public void setQuantity(int quantity){this.quantity=quantity;}
  @Embeddable public record Id(Long cartId,Long variantId) implements java.io.Serializable{}
 }
