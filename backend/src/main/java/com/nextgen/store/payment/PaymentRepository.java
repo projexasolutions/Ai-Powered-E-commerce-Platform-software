@@ -6,4 +6,5 @@ import java.util.*;
 public interface PaymentRepository extends JpaRepository<Payment,Long> {
   Optional<Payment> findByOrderId(Long orderId);
   Optional<Payment> findByGatewayPaymentId(String gatewayPaymentId);
+  Optional<Payment> findByGatewayOrderId(String gatewayOrderId);
 }
