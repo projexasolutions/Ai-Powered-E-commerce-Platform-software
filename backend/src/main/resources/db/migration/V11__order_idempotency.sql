@@ -1,0 +1,1 @@
+alter table orders add column idempotency_key varchar(160) unique;
