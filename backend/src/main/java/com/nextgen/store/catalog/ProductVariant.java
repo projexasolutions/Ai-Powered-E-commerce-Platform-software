@@ -19,4 +19,5 @@ public class ProductVariant {
   @Column(name="created_at",nullable=false) private OffsetDateTime createdAt;
   protected ProductVariant(){}
   public Long getId(){return id;} public long getVersion(){return version;} public Product getProduct(){return product;} public String getSku(){return sku;} public String getSize(){return size;} public String getColor(){return color;} public int getStockQuantity(){return stockQuantity;} public BigDecimal getPriceOverride(){return priceOverride;} public boolean isActive(){return active;}
+  public void decreaseStock(int quantity){if(quantity<1||stockQuantity<quantity)throw new IllegalArgumentException("Insufficient stock for "+sku);stockQuantity-=quantity;}
 }
