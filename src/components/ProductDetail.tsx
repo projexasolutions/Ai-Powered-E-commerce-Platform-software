@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight, Heart, Minus, Plus, ShieldCheck, ShoppingBag, St
 import ReviewSection from './ReviewSection';
 import './ProductDetail.css';
 
-type Product={id:number;name:string;slug:string;description:string;price:number;rating:number;category:string;imageUrl:string;variantId?:number;size?:string;color?:string};
+type Product={id:number;name:string;slug:string;description:string;price:number;rating:number;category:string;imageUrl:string;variantId?:number;size?:string;color?:string;quantity?:number};
 type Variant={id:number;sku:string;size:string;color:string;stockQuantity:number;price:number};
 type Detail={id:number;name:string;slug:string;description:string;price:number;rating:number;category:string;categorySlug:string;imageUrl:string;variants:Variant[]};
 const money=(n:number)=>`₹${n.toLocaleString('en-IN')}`;
