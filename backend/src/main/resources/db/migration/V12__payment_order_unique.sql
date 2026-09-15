@@ -1,0 +1,1 @@
+create unique index uq_payments_order_id on payments(order_id);
