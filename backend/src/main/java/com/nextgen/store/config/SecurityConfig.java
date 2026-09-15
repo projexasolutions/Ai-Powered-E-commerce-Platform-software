@@ -26,7 +26,7 @@ public class SecurityConfig {
     @Bean SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
         http.csrf(c->c.disable()).cors(c->c.configurationSource(corsConfigurationSource()))
             .sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(a->a.requestMatchers("/api/v1/auth/**").permitAll()
+            .authorizeHttpRequests(a->a.requestMatchers("/api/v1/auth/**","/api/v1/payments/webhooks/razorpay").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/v1/products/**","/api/v1/categories/**").permitAll()
                 .anyRequest().authenticated())
             .addFilterBefore(jwt, UsernamePasswordAuthenticationFilter.class);
@@ -35,7 +35,7 @@ public class SecurityConfig {
     @Bean CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration c=new CorsConfiguration(); c.setAllowedOrigins(List.of(origin));
         c.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
-        c.setAllowedHeaders(List.of("Authorization","Content-Type")); c.setAllowCredentials(true);
+        c.setAllowedHeaders(List.of("Authorization","Content-Type","X-Razorpay-Signature","x-razorpay-event-id")); c.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource s=new UrlBasedCorsConfigurationSource(); s.registerCorsConfiguration("/**",c); return s;
     }
 }
