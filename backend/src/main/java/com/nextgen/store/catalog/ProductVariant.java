@@ -8,6 +8,7 @@ import java.time.OffsetDateTime;
 @Table(name="product_variants",uniqueConstraints=@UniqueConstraint(name="uq_product_variant",columnNames={"product_id","size","color"}))
 public class ProductVariant {
   @Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id;
+  @Version @Column(nullable=false) private long version;
   @ManyToOne(fetch=FetchType.LAZY,optional=false) @JoinColumn(name="product_id",nullable=false) private Product product;
   @Column(nullable=false,unique=true,length=100) private String sku;
   @Column(nullable=false,length=40) private String size;
@@ -17,5 +18,5 @@ public class ProductVariant {
   @Column(nullable=false) private boolean active=true;
   @Column(name="created_at",nullable=false) private OffsetDateTime createdAt;
   protected ProductVariant(){}
-  public Long getId(){return id;} public Product getProduct(){return product;} public String getSku(){return sku;} public String getSize(){return size;} public String getColor(){return color;} public int getStockQuantity(){return stockQuantity;} public BigDecimal getPriceOverride(){return priceOverride;} public boolean isActive(){return active;}
+  public Long getId(){return id;} public long getVersion(){return version;} public Product getProduct(){return product;} public String getSku(){return sku;} public String getSize(){return size;} public String getColor(){return color;} public int getStockQuantity(){return stockQuantity;} public BigDecimal getPriceOverride(){return priceOverride;} public boolean isActive(){return active;}
 }
