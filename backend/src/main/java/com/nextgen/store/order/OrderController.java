@@ -15,6 +15,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/v1/orders")
 public class OrderController {
+  private static final BigDecimal FREE_DELIVERY_THRESHOLD=new BigDecimal("999.00");
+  private static final BigDecimal STANDARD_DELIVERY_CHARGE=new BigDecimal("99.00");
   private final OrderRepository orders; private final UserRepository users; private final AddressRepository addresses; private final ProductVariantRepository variants;
   public OrderController(OrderRepository orders,UserRepository users,AddressRepository addresses,ProductVariantRepository variants){this.orders=orders;this.users=users;this.addresses=addresses;this.variants=variants;}
   @GetMapping public List<OrderResponse> list(Authentication auth){User u=user(auth);return orders.findByUserIdOrderByCreatedAtDesc(u.getId()).stream().map(OrderResponse::from).toList();}
@@ -33,8 +35,8 @@ public class OrderController {
       BigDecimal price=v.getPriceOverride()!=null?v.getPriceOverride():v.getProduct().getPrice();
       subtotal=subtotal.add(price.multiply(BigDecimal.valueOf(item.quantity())));lines.add(new Line(v,item.quantity(),price));
     }
-    // Delivery is an explicit checkout charge; it is never silently included in product prices.
-    BigDecimal delivery=new BigDecimal("99.00");
+    // ₹999+ qualifies for free delivery; otherwise delivery is ₹99. This is calculated server-side.
+    BigDecimal delivery=subtotal.compareTo(FREE_DELIVERY_THRESHOLD)>=0?BigDecimal.ZERO:STANDARD_DELIVERY_CHARGE;
     BigDecimal total=subtotal.add(delivery);
     Order order=orders.save(new Order(u,address,subtotal,delivery,total,method));
     for(Line l:lines){l.variant().decreaseStock(l.quantity());order.getItems().add(new OrderItem(order,l.variant(),l.quantity(),l.price()));}
