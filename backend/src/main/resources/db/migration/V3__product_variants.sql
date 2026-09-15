@@ -30,6 +30,6 @@ select p.id, 'GENZ-'||upper(replace(p.slug,'-',''))||'-M-GRN', 'M', 'Forest Gree
 insert into product_variants(product_id,sku,size,color,stock_quantity)
 select p.id, 'GENZ-'||upper(replace(p.slug,'-',''))||'-L-GRN', 'L', 'Forest Green', 12 from products p where p.slug='minimal-hoodie';
 insert into product_variants(product_id,sku,size,color,stock_quantity)
-select p.id, 'GENZ-'||upper(replace(p.slug,'-',''))||'-OS-BLK', 'One Size', 'Black', 30 from products p where p.slug='ny-baseball-cap';
+select p.id, 'GENZ-'||upper(replace(p.slug,'-',''))||'-OS-BLK-CAP', 'One Size', 'Black', 30 from products p where p.slug='ny-baseball-cap';
 insert into product_variants(product_id,sku,size,color,stock_quantity)
-select p.id, 'GENZ-'||upper(replace(p.slug,'-',''))||'-OS-BLK', 'One Size', 'Black', 22 from products p where p.slug='aero-sunglasses';
+select p.id, 'GENZ-'||upper(replace(p.slug,'-',''))||'-OS-BLK-SUN', 'One Size', 'Black', 22 from products p where p.slug='aero-sunglasses';
