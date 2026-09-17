@@ -24,7 +24,9 @@ services:
       DATABASE_USERNAME: nextgen
       DATABASE_PASSWORD: nextgen
       CORS_ALLOWED_ORIGIN: http://localhost:5173
-      JWT_SECRET: change-this-development-secret-to-a-long-random-value-please
+      JWT_SECRET: ${JWT_SECRET:-change-this-development-secret-to-a-long-random-value-please}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
     ports:
       - "8080:8080"
 
