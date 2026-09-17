@@ -12,5 +12,21 @@ services:
     volumes:
       - nextgen_pgdata:/var/lib/postgresql/data
 
+  backend:
+    build:
+      context: ./backend
+    container_name: nextgen-store-api
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres:5432/nextgen_store
+      DATABASE_USERNAME: nextgen
+      DATABASE_PASSWORD: nextgen
+      CORS_ALLOWED_ORIGIN: http://localhost:5173
+      JWT_SECRET: change-this-development-secret-to-a-long-random-value-please
+    ports:
+      - "8080:8080"
+
 volumes:
   nextgen_pgdata:
